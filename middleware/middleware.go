@@ -6,7 +6,6 @@ import (
 	"crypto/cipher"
 	"encoding/base64"
 	"encoding/json"
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"log"
 	"net/http"
@@ -117,10 +116,7 @@ func CheckDownloadPermission() gin.HandlerFunc {
 		params := c.Request.URL.Query()
 		msg := params.Get("token")
 
-		fmt.Println(msg)
-
 		token, _ := base64.StdEncoding.DecodeString(msg)
-		fmt.Println(token)
 
 		if len(token) < nonceSize {
 			c.AbortWithStatus(http.StatusBadRequest)
@@ -132,8 +128,6 @@ func CheckDownloadPermission() gin.HandlerFunc {
 		if err != nil {
 			c.AbortWithError(http.StatusBadRequest, err)
 		}
-
-		fmt.Println(string(plaintext))
 
 		var fileInfo FileInfo
 		if err := json.Unmarshal(plaintext, &fileInfo); err == nil {
