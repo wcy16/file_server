@@ -1,0 +1,14 @@
+# vendor file
+/vendor/*
+!/vendor/vendor.json
+
+# output file
+*.o
+*.exe
+
+# data file
+/data
+/default
+
+# key file
+key
