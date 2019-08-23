@@ -119,30 +119,41 @@ func CheckDownloadPermission() gin.HandlerFunc {
 		token, _ := base64.StdEncoding.DecodeString(msg)
 
 		if len(token) < nonceSize {
-			c.AbortWithStatus(http.StatusBadRequest)
+			c.Redirect(http.StatusMovedPermanently, "/error")
+			c.Abort()
+			//c.AbortWithStatus(http.StatusBadRequest)
 			return
 		}
 
 		nonce, ciphertext := token[:nonceSize], token[nonceSize:]
 		plaintext, err := gcm.Open(nil, nonce, ciphertext, nil)
 		if err != nil {
-			c.AbortWithError(http.StatusBadRequest, err)
+			c.Redirect(http.StatusMovedPermanently, "/error")
+			c.Abort()
+			//c.AbortWithError(http.StatusBadRequest, err)
+			return
 		}
 
 		var fileInfo FileInfo
 		if err := json.Unmarshal(plaintext, &fileInfo); err == nil {
 			if fileInfo.FileName == "" {
-				c.AbortWithStatusJSON(http.StatusBadRequest, "empty file name")
+				c.Redirect(http.StatusMovedPermanently, "/error")
+				c.Abort()
+				//c.AbortWithStatusJSON(http.StatusBadRequest, "empty file name")
 				return
 			}
 			if fileInfo.Message != "download" { // message should be "download"
-				c.AbortWithStatusJSON(http.StatusBadRequest, "error task")
+				c.Redirect(http.StatusMovedPermanently, "/error")
+				c.Abort()
+				//c.AbortWithStatusJSON(http.StatusBadRequest, "error task")
 				return
 			}
 			// validate time
 			now := time.Now().Unix()
 			if now > fileInfo.Expire {
-				c.AbortWithStatusJSON(http.StatusBadRequest, "expired")
+				c.Redirect(http.StatusMovedPermanently, "/error")
+				c.Abort()
+				//c.AbortWithStatusJSON(http.StatusBadRequest, "expired")
 				return
 			}
 
@@ -153,7 +164,9 @@ func CheckDownloadPermission() gin.HandlerFunc {
 			c.Keys["displayname"] = fileInfo.DisplayName
 
 		} else {
-			c.AbortWithError(http.StatusBadRequest, err)
+			c.Redirect(http.StatusMovedPermanently, "/error")
+			c.Abort()
+			//c.AbortWithError(http.StatusBadRequest, err)
 			return
 		}
 
