@@ -3,13 +3,12 @@ package api
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"log"
 	"net/http"
 	"path/filepath"
 	"strings"
 )
 
-const path = "./data/"
+const path = "data/"
 
 func prefix(name string) string {
 	return path + name
@@ -40,7 +39,7 @@ func Download(c *gin.Context) {
 	}
 
 	targetPath := prefix(filename)
-	log.Println(targetPath)
+	//log.Println(targetPath)
 	//This ckeck is for example, I not sure is it can prevent all possible filename attacks - will be much better if real filename will not come from user side. I not even tryed this code
 	if !strings.HasPrefix(filepath.Clean(targetPath), path) {
 		c.Redirect(http.StatusTemporaryRedirect, "/not_found")
