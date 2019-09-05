@@ -27,6 +27,8 @@ func Upload(c *gin.Context) {
 		c.String(http.StatusBadRequest, fmt.Sprintf("upload file err: %s", err.Error()))
 		return
 	}
+	// return file name
+	c.String(http.StatusOK, fmt.Sprint(file.Filename))
 }
 
 func Download(c *gin.Context) {
