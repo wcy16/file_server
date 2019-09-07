@@ -42,7 +42,7 @@ func Download(c *gin.Context) {
 
 	targetPath := prefix(filename)
 	//log.Println(targetPath)
-	//This ckeck is for example, I not sure is it can prevent all possible filename attacks - will be much better if real filename will not come from user side. I not even tryed this code
+	// check filename
 	if !strings.HasPrefix(filepath.Clean(targetPath), path) {
 		c.Redirect(http.StatusTemporaryRedirect, "/not_found")
 		return

@@ -13,6 +13,7 @@ func FileServerRouter() *gin.Engine {
 
 	router.StaticFile("not_found", "./default/default.jpg")
 	router.StaticFile("file_not_found", "./default/default.jpg")
+	router.StaticFile("default", "./default/default.jpg")
 	router.StaticFile("error", "./default/error.png")
 
 	router.POST("/file", middleware.CheckUploadPermission(), api.Upload)
