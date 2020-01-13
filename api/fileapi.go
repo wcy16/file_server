@@ -48,6 +48,6 @@ func Download(c *gin.Context) {
 		return
 	}
 
-	c.Writer.Header().Set("content-disposition", fmt.Sprintf("attachment; filename=\"%s\"", displayName))
+	c.Writer.Header().Set("content-disposition", fmt.Sprintf("inline; filename=\"%s\"", displayName))
 	c.File(targetPath)
 }
